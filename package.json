@@ -1,0 +1,42 @@
+{
+  "name": "claude-coop",
+  "version": "0.1.0",
+  "description": "Co-op mode for Claude Code: one lead Claude hands tasks to worker Claudes on your friends' PCs and accounts, and every Claude sees what the crew is doing.",
+  "type": "module",
+  "bin": {
+    "coop": "bin/coop.js",
+    "claude-coop": "bin/coop.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "templates/",
+    "wrangler.example.toml"
+  ],
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1 \"test/*.test.js\"",
+    "hub": "node bin/coop.js hub"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "~1.32.2",
+    "zod": "^4.1.0"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "mcp",
+    "channels",
+    "multi-agent",
+    "collaboration",
+    "co-op",
+    "pair-programming"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Plyxen/claude-coop.git"
+  }
+}

@@ -1,0 +1,16 @@
+# Copy to wrangler.toml (ignored by git) and fill in. See docs/deploy-cloudflare.md.
+name = "claude-coop-hub"
+main = "src/hub/cloudflare.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+COOP_LEAD_NAME = "lead"        # your crew name as the lead
+COOP_HUB_NAME = "my-crew"      # the crew's name, shown on the board
+COOP_MAX_WORKERS = "8"
+
+# The lead token is a secret: npx wrangler@4 secret put COOP_LEAD_TOKEN
+
+[[d1_databases]]
+binding = "DB"
+database_name = "claude-coop"
+database_id = "PASTE-THE-ID-FROM-wrangler-d1-create"

@@ -1,0 +1,8 @@
+node_modules/
+.wrangler/
+wrangler.toml
+.dev.vars
+*.log
+*.db
+*.db-shm
+*.db-wal
