@@ -89,6 +89,8 @@ test('a lead and two workers run a task end to end', async () => {
   await coop('join', '--hub', hub.url, '--token', tokenOf(bobInvite), '--profile', 'bob')
   await coop('join', '--hub', hub.url, '--token', tokenOf(annaInvite), '--profile', 'anna')
   assert.match(await coop('profiles'), /bob: bob \(worker\)/)
+  // Joining and running CLI commands doesn't count as being online.
+  assert.match(await coop('status', '--profile', 'boss'), /○ bob: offline \(last seen never\)/)
 
   const lead = await session('boss')
   const bob = await session('bob')

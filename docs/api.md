@@ -1,6 +1,6 @@
 # Hub API
 
-JSON over HTTP. Every `/v1/` request needs `Authorization: Bearer <token>`. Errors come back as `{"error": "..."}` with a fitting status code (400 bad input, 401 bad token, 403 not allowed for your role, 404 not found, 409 conflict or wrong state).
+JSON over HTTP. Every `/v1/` request needs `Authorization: Bearer <token>`. Requests also count as the member's presence (`online` on the board, and a `member_online` event after 90 seconds away), unless they send `X-Coop-Presence: off`, as the CLI does. Errors come back as `{"error": "..."}` with a fitting status code (400 bad input, 401 bad token, 403 not allowed for your role, 404 not found, 409 conflict or wrong state).
 
 | Method and path | Who | What |
 | --- | --- | --- |

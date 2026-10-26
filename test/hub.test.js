@@ -9,11 +9,11 @@ async function setup({ maxWorkers = 3 } = {}) {
   let clock = Date.parse('2026-10-26T12:00:00Z')
   const db = await sqliteDatabase()
   const hub = createHub({ db, leadToken: LEAD, leadName: 'boss', hubName: 'testcrew', maxWorkers, now: () => clock })
-  async function call(token, method, path, body) {
+  async function call(token, method, path, body, headers = {}) {
     const response = await hub.fetch(
       new Request(`http://hub${path}`, {
         method,
-        headers: token ? { authorization: `Bearer ${token}` } : {},
+        headers: { ...(token ? { authorization: `Bearer ${token}` } : {}), ...headers },
         body: body === undefined ? undefined : JSON.stringify(body),
       }),
     )
@@ -191,6 +191,23 @@ test('presence: the board shows who is online, and a returning member is announc
   assert.equal((await events(LEAD)).filter((e) => e.type === 'member_online').length, before + 1)
 })
 
+test('presence: requests with x-coop-presence off (the CLI) do not count', async () => {
+  const { call, invite, events } = await setup()
+  const bob = await invite('bob')
+  const cli = { 'x-coop-presence': 'off' }
+  const bobOnline = async () => (await call(LEAD, 'GET', '/v1/board')).body.members.find((m) => m.name === 'bob').online
+  const bobAnnounced = async () => (await events(LEAD)).filter((e) => e.type === 'member_online' && e.actor === 'bob').length
+
+  assert.equal((await call(bob, 'GET', '/v1/me', undefined, cli)).status, 200)
+  assert.equal((await call(bob, 'GET', '/v1/board', undefined, cli)).status, 200)
+  assert.equal(await bobOnline(), false)
+  assert.equal(await bobAnnounced(), 0)
+
+  await call(bob, 'GET', '/v1/events?after=0')
+  assert.equal(await bobOnline(), true)
+  assert.equal(await bobAnnounced(), 1)
+})
+
 test('the event cursor pages through without skipping', async () => {
   const { call, invite } = await setup()
   const bob = await invite('bob')
@@ -219,5 +236,14 @@ test('bad input is refused with a clear error', async () => {
 test('branch names are short, ascii and safe', () => {
   assert.equal(branchName(12, 'Crème brûlée façade: naïve über-fix!'), 'coop/12-creme-brulee-facade-naive-uber-fix')
   assert.equal(branchName(3, '!!!'), 'coop/3')
-  assert.ok(branchName(4, 'a'.repeat(100)).length <= 'coop/4-'.length + 40)
+  assert.equal(branchName(4, 'a'.repeat(100)), `coop/4-${'a'.repeat(40)}`)
+})
+
+test('long titles are shortened at a word, not mid-word or on "for"', () => {
+  assert.equal(branchName(1, 'Update "Working together" in CLAUDE.md for claude-coop'), 'coop/1-update-working-together-in-claude-md')
+  assert.equal(branchName(2, 'Translate the dashboard settings page into Hungarian'), 'coop/2-translate-the-dashboard-settings-page')
+  assert.equal(branchName(5, 'Add CSV export of the monthly report to the dashboard'), 'coop/5-add-csv-export-of-the-monthly-report')
+  // Titles that fit are left alone, even if they end on a short word.
+  assert.equal(branchName(6, 'Fix sign in'), 'coop/6-fix-sign-in')
+  assert.equal(branchName(7, 'What is this for'), 'coop/7-what-is-this-for')
 })

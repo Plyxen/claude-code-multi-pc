@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1
+
+- CLI commands (`coop join`, `status`, `doctor`, ...) no longer make you look online or tell the lead "your Claude is online". Only a running Claude session counts. The hub skips presence for requests with `X-Coop-Presence: off`; update the hub too.
+- Suggested branch names keep whole words and don't end on words like "for" or "the" when a long title is shortened.
+
 ## 0.1.0
 
 First release.

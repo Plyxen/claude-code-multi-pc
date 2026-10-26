@@ -9,12 +9,14 @@ export class HubError extends Error {
 }
 
 export class HubClient {
-  constructor({ hub, token, timeoutMs = 15_000 }) {
+  // presence: false for one-off commands, so they don't make you look online.
+  constructor({ hub, token, timeoutMs = 15_000, presence = true }) {
     if (!hub) throw new Error('no hub URL')
     if (!token) throw new Error('no token')
     this.base = hub.replace(/\/+$/, '')
     this.token = token
     this.timeoutMs = timeoutMs
+    this.presence = presence
   }
 
   async request(method, path, body) {
@@ -26,6 +28,7 @@ export class HubClient {
           authorization: `Bearer ${this.token}`,
           'content-type': 'application/json',
           'user-agent': `claude-coop/${VERSION}`,
+          ...(this.presence ? {} : { 'x-coop-presence': 'off' }),
         },
         body: body === undefined ? undefined : JSON.stringify(body),
         signal: AbortSignal.timeout(this.timeoutMs),

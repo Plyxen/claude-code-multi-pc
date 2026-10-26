@@ -66,7 +66,7 @@ Channel pushes are best effort: Claude Code doesn't acknowledge them. claude-coo
 
 ## Presence
 
-Any request to the hub counts as a heartbeat, and the MCP server polls all the time. A member counts as online if the hub heard from them in the last 90 seconds. Someone coming back after being away creates a `member_online` event, which the lead hears about.
+The MCP server's requests count as a heartbeat, and it polls all the time. One-off CLI commands (`coop join`, `status`, `doctor` and so on) don't count, so they don't make anyone look online. A member counts as online if their Claude session reached the hub in the last 90 seconds. Someone coming back after being away creates a `member_online` event, which the lead hears about.
 
 ## Permission relay
 

@@ -1,6 +1,6 @@
 {
   "name": "claude-coop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Co-op mode for Claude Code: one lead Claude hands tasks to worker Claudes on your friends' PCs and accounts, and every Claude sees what the crew is doing.",
   "type": "module",
   "bin": {

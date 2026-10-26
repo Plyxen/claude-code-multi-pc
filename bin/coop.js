@@ -16,6 +16,9 @@ const { formatBoard } = await import('../src/format.js')
 const { VERSION, newToken } = await import('../src/hub/app.js')
 const { INSTALL_COMMAND, inviteText } = await import('../src/meta.js')
 
+// CLI commands are one-off, so they don't count as being online.
+const hubClient = (profile) => new HubClient({ ...profile, presence: false })
+
 const HELP = `claude-coop ${VERSION}: one lead Claude, a crew of worker Claudes on other PCs.
 
 Lead
@@ -135,7 +138,7 @@ async function join(args) {
   if (url.protocol !== 'https:' && !['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) && !/^100\.|\.ts\.net$/.test(url.hostname)) {
     console.warn('Warning: this hub is not on https, so the token travels unencrypted. Use https outside your own PC or private network.')
   }
-  const client = new HubClient({ hub: opts.hub, token: opts.token })
+  const client = hubClient({ hub: opts.hub, token: opts.token })
   const me = await client.me()
   const name = opts.profile ?? config.profileSlug(me.hub)
   const saved = config.saveProfile(name, { hub: client.base, token: opts.token, member: me.name, role: me.role, lead: me.lead, crew: me.hub })
@@ -152,7 +155,7 @@ async function invite(args) {
   const name = opts._[0]
   if (!name) throw new Error('Usage: coop invite NAME')
   const profile = config.getProfile(opts.profile)
-  const result = await new HubClient(profile).invite(name)
+  const result = await hubClient(profile).invite(name)
   console.log(result.rotated ? `New token for ${result.name}; the old one stopped working.\n` : `Invited ${result.name}.\n`)
   console.log('Send them this privately (the token works like a password):\n')
   console.log(inviteText({ hub: profile.hub, name: result.name, token: result.token, crew: profile.crew }))
@@ -161,13 +164,13 @@ async function invite(args) {
 async function remove(args) {
   const opts = options(args, {}, { positionals: 1 })
   if (!opts._[0]) throw new Error('Usage: coop remove NAME')
-  const result = await new HubClient(config.getProfile(opts.profile)).remove(opts._[0])
+  const result = await hubClient(config.getProfile(opts.profile)).remove(opts._[0])
   console.log(`Removed ${result.removed}.${result.released.length ? ` Back in the pool: ${result.released.map((id) => `#${id}`).join(', ')}.` : ''}`)
 }
 
 async function status(args) {
   const opts = options(args, {})
-  console.log(formatBoard(await new HubClient(config.getProfile(opts.profile)).board()))
+  console.log(formatBoard(await hubClient(config.getProfile(opts.profile)).board()))
 }
 
 async function start(args) {
@@ -226,7 +229,7 @@ async function doctor(args) {
   }
   if (profile) {
     try {
-      const me = await new HubClient(profile).me()
+      const me = await hubClient(profile).me()
       check(me.name === profile.member, `Hub ${profile.hub} knows you as ${me.name} (${me.role})`, 'Your profile is out of date: run coop join again.')
     } catch (error) {
       check(false, `Hub ${profile.hub}`, error.message)

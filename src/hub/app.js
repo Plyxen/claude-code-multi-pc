@@ -3,7 +3,7 @@
 // code runs on Cloudflare Workers (cloudflare.js) and on Node (node.js).
 import { SCHEMA } from './schema.js'
 
-export const VERSION = '0.1.0'
+export const VERSION = '0.1.1'
 
 const ONLINE_MS = 90_000
 const SEEN_WRITE_MS = 30_000
@@ -115,7 +115,9 @@ export function createHub({ db, leadToken, leadName = 'lead', hubName = 'claude-
     if (!member) throw new HttpError(401, 'unknown or revoked token')
 
     // Presence: write last_seen at most every 30 s, and announce a member
-    // who comes back after being away.
+    // who comes back after being away. One-off CLI commands send
+    // "x-coop-presence: off": only a running Claude session counts as online.
+    if (request.headers.get('x-coop-presence') === 'off') return member
     const last = member.last_seen ? Date.parse(member.last_seen) : 0
     if (now() - last >= SEEN_WRITE_MS) {
       member.last_seen = iso()
@@ -474,15 +476,27 @@ function pastTense(action) {
   return { claim: 'claimed', submit: 'submitted', approve: 'approved', changes: 'sent back', assign: 'reassigned', cancel: 'cancelled', reopen: 'reopened', release: 'released', block: 'blocked', progress: 'updated' }[action] ?? action
 }
 
+// Words a shortened branch name shouldn't end on ("...-claude-md-for").
+const DANGLING = new Set(['a', 'an', 'and', 'at', 'by', 'for', 'from', 'of', 'or', 'the', 'to', 'with'])
+
 export function branchName(id, title) {
-  const slug = title
+  const words = title
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 40)
-    .replace(/-+$/, '')
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+  // Whole words, up to 40 characters.
+  const kept = []
+  for (const word of words) {
+    if ([...kept, word].join('-').length > 40) break
+    kept.push(word)
+  }
+  if (kept.length < words.length) {
+    while (kept.length > 1 && DANGLING.has(kept.at(-1))) kept.pop()
+    if (!kept.length) kept.push(words[0].slice(0, 40))
+  }
+  const slug = kept.join('-')
   return `coop/${id}${slug ? `-${slug}` : ''}`
 }
 
