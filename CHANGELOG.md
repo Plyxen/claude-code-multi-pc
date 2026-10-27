@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Renamed from claude-coop to claude-code-multi-pc, so people looking for Claude Code across several PCs and accounts can find it. The command is still `coop`, settings stay in `~/.claude-coop`, and the old GitHub address redirects. To switch an existing install: `npm uninstall -g claude-coop`, then `npm install -g github:Plyxen/claude-code-multi-pc`.
+- A new hub's default crew name is now `coop`, and the Cloudflare example names the Worker and database `coop-hub`. Hubs you already run keep their names.
+
 ## 0.1.1
 
 - CLI commands (`coop join`, `status`, `doctor`, ...) no longer make you look online or tell the lead "your Claude is online". Only a running Claude session counts. The hub skips presence for requests with `X-Coop-Presence: off`; update the hub too.

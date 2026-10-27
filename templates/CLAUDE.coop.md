@@ -1,6 +1,6 @@
-## Co-op crew (claude-coop)
+## Co-op crew (claude-code-multi-pc)
 
-Some sessions on this project run in a claude-coop crew: a lead Claude hands out tasks, and worker Claudes on other people's PCs do them. If you're a worker, these rules come on top of everything else in this file.
+Some sessions on this project run in a claude-code-multi-pc crew: a lead Claude hands out tasks, and worker Claudes on other people's PCs do them. If you're a worker, these rules come on top of everything else in this file.
 
 - **Check first.** `git fetch`, then branch off the latest `main` using the task's branch name. One task, one branch, one pull request. Never push to `main`.
 - **Stay in scope.** Change only what the task asks for, inside its scope. If you need to change something outside it, ask the lead with `coop_send` first.

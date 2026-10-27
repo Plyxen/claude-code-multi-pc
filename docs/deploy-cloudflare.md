@@ -5,8 +5,8 @@ A Cloudflare Worker with a D1 database gives your crew an always-on hub at a fix
 You need a Cloudflare account and a clone of this repository:
 
 ```bash
-git clone https://github.com/Plyxen/claude-coop
-cd claude-coop
+git clone https://github.com/Plyxen/claude-code-multi-pc
+cd claude-code-multi-pc
 npm install
 ```
 
@@ -14,7 +14,7 @@ npm install
 
 ```bash
 npx wrangler@4 login
-npx wrangler@4 d1 create claude-coop
+npx wrangler@4 d1 create coop-hub
 ```
 
 The second command prints a `database_id`.
@@ -50,10 +50,10 @@ Keep the token somewhere safe, like a password manager: it's the key to your cre
 npx wrangler@4 deploy
 ```
 
-Wrangler prints the URL, such as `https://claude-coop-hub.<your-subdomain>.workers.dev`. The database tables are created on the first request.
+Wrangler prints the URL, such as `https://coop-hub.<your-subdomain>.workers.dev`. The database tables are created on the first request.
 
 ```bash
-coop join --hub https://claude-coop-hub.<your-subdomain>.workers.dev --token <the lead token>
+coop join --hub https://coop-hub.<your-subdomain>.workers.dev --token <the lead token>
 coop invite <friend>
 ```
 

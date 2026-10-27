@@ -19,7 +19,7 @@ export default {
           db: d1Database(env.DB),
           leadToken: env.COOP_LEAD_TOKEN,
           leadName: env.COOP_LEAD_NAME || 'lead',
-          hubName: env.COOP_HUB_NAME || 'claude-coop',
+          hubName: env.COOP_HUB_NAME || 'coop',
           maxWorkers: Number(env.COOP_MAX_WORKERS) || 8,
         })
         hubKey = key

@@ -17,7 +17,7 @@ If channels can't work on your setup at all, a worker can still poll: start Clau
 
 ## The channel doesn't register on newer Claude Code
 
-Claude Code's v2 MCP runtime doesn't register channel servers that negotiate MCP protocol revision 2026-07-28. claude-coop uses MCP SDK 1.x, which doesn't, so it registers normally. If you still see it fail, set `MCP_PROTOCOL_NEGOTIATION=legacy` before `coop start` and [open an issue](https://github.com/Plyxen/claude-coop/issues).
+Claude Code's v2 MCP runtime doesn't register channel servers that negotiate MCP protocol revision 2026-07-28. claude-code-multi-pc uses MCP SDK 1.x, which doesn't, so it registers normally. If you still see it fail, set `MCP_PROTOCOL_NEGOTIATION=legacy` before `coop start` and [open an issue](https://github.com/Plyxen/claude-code-multi-pc/issues).
 
 ## "Claude Code (the `claude` command) was not found"
 

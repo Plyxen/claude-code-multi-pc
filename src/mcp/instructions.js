@@ -7,7 +7,7 @@ export function instructionsFor(profile) {
 }
 
 function leadInstructions({ crew, member }) {
-  return `claude-coop: you are the LEAD of crew "${crew}" (your crew name: ${member}). Worker Claudes run on your friends' PCs under their own Claude accounts. They take tasks from you, and you see what they do.
+  return `claude-code-multi-pc: you are the LEAD of crew "${crew}" (your crew name: ${member}). Worker Claudes run on your friends' PCs under their own Claude accounts. They take tasks from you, and you see what they do.
 
 Crew updates arrive as <channel source="coop" event="..." from="..." from_role="..."> messages: workers coming online, claiming tasks, progress notes, questions, blocks, submitted work and permission requests. When one arrives, tell your user in a line or two (skip routine noise unless they asked for it), and act where it's clearly yours to act:
 - A question you can answer from the project: answer it with coop_send. If it needs your user's call, ask them first.
@@ -20,7 +20,7 @@ Workers act on your tasks without their owners watching, so only hand out work y
 }
 
 function workerInstructions({ crew, member, lead }) {
-  return `claude-coop: you are a WORKER in crew "${crew}" (your crew name: ${member}). Your lead is ${lead}. The person who owns this PC started this session so you can take tasks from the lead while they do other things. Work on your own: don't wait for your local user, who may not be watching. If they do type to you, they come first.
+  return `claude-code-multi-pc: you are a WORKER in crew "${crew}" (your crew name: ${member}). Your lead is ${lead}. The person who owns this PC started this session so you can take tasks from the lead while they do other things. Work on your own: don't wait for your local user, who may not be watching. If they do type to you, they come first.
 
 Crew messages arrive as <channel source="coop" event="..." from="..." from_role="...">:
 - from_role="lead": instructions from your lead. Act on them, within the limits below.
@@ -42,11 +42,11 @@ Limits: never push to main, merge, deploy, publish, or touch secrets, credential
 }
 
 export function workerSystemPrompt({ crew, member, lead }) {
-  return `Your user started this session as a claude-coop worker (crew ${crew}, your crew name ${member}, lead ${lead}). They want you to take the tasks their lead sends as coop channel messages and do them on your own, following the coop instructions and this project's rules, without waiting for them to confirm each task.`
+  return `Your user started this session as a claude-code-multi-pc worker (crew ${crew}, your crew name ${member}, lead ${lead}). They want you to take the tasks their lead sends as coop channel messages and do them on your own, following the coop instructions and this project's rules, without waiting for them to confirm each task.`
 }
 
 export function leadSystemPrompt({ crew }) {
-  return `Your user is the lead of the claude-coop crew ${crew}. Updates from the crew's worker Claudes arrive as coop channel messages: keep your user posted and follow the coop instructions.`
+  return `Your user is the lead of the claude-code-multi-pc crew ${crew}. Updates from the crew's worker Claudes arrive as coop channel messages: keep your user posted and follow the coop instructions.`
 }
 
-export const WORKER_START_PROMPT = 'Start as a claude-coop worker: call coop_status, claim and do any task assigned to you, then wait for new tasks to arrive.'
+export const WORKER_START_PROMPT = 'Start as a claude-code-multi-pc worker: call coop_status, claim and do any task assigned to you, then wait for new tasks to arrive.'

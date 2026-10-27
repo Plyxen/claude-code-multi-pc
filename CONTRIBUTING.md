@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping. claude-coop is small on purpose: plain JavaScript (ES modules, no build step), Node 22.13+, and two dependencies (the MCP SDK and zod).
+Thanks for helping. claude-code-multi-pc is small on purpose: plain JavaScript (ES modules, no build step), Node 22.13+, and two dependencies (the MCP SDK and zod).
 
 ```bash
 npm install

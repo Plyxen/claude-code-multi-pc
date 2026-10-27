@@ -1,6 +1,8 @@
-# claude-coop
+# claude-code-multi-pc
 
-**Co-op mode for Claude Code.** Your Claude is the lead. Your friends' Claudes, on their own PCs and their own Claude accounts, are the crew: they take tasks from your Claude, do them, and report back, while your friends get on with something else.
+**Run Claude Code across multiple PCs and multiple Claude accounts, as one team.** Your Claude is the lead. Your friends' Claudes, each on their own PC and their own Claude account, are the crew: they take tasks from your Claude, do them, and report back, while your friends get on with something else. Co-op mode for Claude Code, run with the `coop` command.
+
+It isn't an account switcher. Every Claude stays on its own computer, signed in to its own person's account, and they work on one project together: from two PCs up to nine.
 
 ```
         YOUR PC                                                FRIENDS' PCs
@@ -21,7 +23,7 @@
 - **Git does the code.** Each task gets its own branch (`coop/12-add-csv-export`). Workers push it and open a pull request, and the lead reviews it before anything is merged.
 - **Your friend stays in charge of their PC.** Workers keep to the project folder and the project's rules, and can't deploy or touch secrets. Anything Claude Code would ask permission for can be forwarded to the lead's user to answer.
 
-> claude-coop is a community project. It is not made or endorsed by Anthropic.
+> claude-code-multi-pc is a community project. It is not made or endorsed by Anthropic.
 
 ## How a task flows
 
@@ -42,7 +44,7 @@
 ### The lead (you)
 
 ```bash
-npm install -g github:Plyxen/claude-coop
+npm install -g github:Plyxen/claude-code-multi-pc
 ```
 
 Set up a hub. The quickest test is one on your own PC:
@@ -65,13 +67,13 @@ Then just talk to your Claude: *"Split the export feature into tasks for anna an
 ### Each friend
 
 ```bash
-npm install -g github:Plyxen/claude-coop
+npm install -g github:Plyxen/claude-code-multi-pc
 coop join --hub <hub url> --token <their token>
 cd path/to/their/clone/of/the/project
 coop start
 ```
 
-Claude Code starts and shows two prompts the first time: trust the folder, and confirm the development channel (claude-coop isn't on Anthropic's channel allowlist during the research preview). Press Enter on both, then minimize the window. Full guide: [docs/worker-setup.md](docs/worker-setup.md).
+Claude Code starts and shows two prompts the first time: trust the folder, and confirm the development channel (claude-code-multi-pc isn't on Anthropic's channel allowlist during the research preview). Press Enter on both, then minimize the window. Full guide: [docs/worker-setup.md](docs/worker-setup.md).
 
 ## What each Claude gets
 

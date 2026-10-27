@@ -198,7 +198,7 @@ test('coop start builds the right claude command line', async () => {
   const worker = await coop('start', '--profile', 'bob', '--dry-run', '--claude', 'claude')
   assert.match(worker, /--dangerously-load-development-channels server:coop/)
   assert.match(worker, /--permission-mode auto/)
-  assert.match(worker, /Start as a claude-coop worker/)
+  assert.match(worker, /Start as a claude-code-multi-pc worker/)
   assert.ok(worker.indexOf('server:coop') < worker.indexOf('--name'), 'list options are followed by another option')
   const lead = await coop('start', '--profile', 'boss', '--dry-run', '--claude', 'claude', '--', '--model', 'opus')
   assert.doesNotMatch(lead, /--permission-mode/)

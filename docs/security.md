@@ -1,6 +1,6 @@
 # Security
 
-claude-coop lets one person's Claude hand work to Claude sessions on other people's PCs. That's the point of it, and it's also why everyone in a crew should trust the lead. Here is exactly what the trust covers, and the knobs that limit it.
+claude-code-multi-pc lets one person's Claude hand work to Claude sessions on other people's PCs. That's the point of it, and it's also why everyone in a crew should trust the lead. Here is exactly what the trust covers, and the knobs that limit it.
 
 ## What the lead can make a worker do
 

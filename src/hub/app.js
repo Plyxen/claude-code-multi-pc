@@ -3,7 +3,7 @@
 // code runs on Cloudflare Workers (cloudflare.js) and on Node (node.js).
 import { SCHEMA } from './schema.js'
 
-export const VERSION = '0.1.1'
+export const VERSION = '0.1.2'
 
 const ONLINE_MS = 90_000
 const SEEN_WRITE_MS = 30_000
@@ -38,7 +38,7 @@ export class HttpError extends Error {
   }
 }
 
-export function createHub({ db, leadToken, leadName = 'lead', hubName = 'claude-coop', maxWorkers = 8, now = () => Date.now() }) {
+export function createHub({ db, leadToken, leadName = 'lead', hubName = 'coop', maxWorkers = 8, now = () => Date.now() }) {
   if (!leadToken || leadToken.length < 16) throw new Error('The lead token (COOP_LEAD_TOKEN) must be set and at least 16 characters long.')
   if (!NAME_RE.test(leadName)) throw new Error(`Lead name "${leadName}" is not valid: use lowercase letters, digits, - and _ (max 32).`)
 

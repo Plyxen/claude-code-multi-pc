@@ -1,5 +1,5 @@
 # Copy to wrangler.toml (ignored by git) and fill in. See docs/deploy-cloudflare.md.
-name = "claude-coop-hub"
+name = "coop-hub"
 main = "src/hub/cloudflare.js"
 compatibility_date = "2026-09-01"
 
@@ -12,5 +12,5 @@ COOP_MAX_WORKERS = "8"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "claude-coop"
+database_name = "coop-hub"
 database_id = "PASTE-THE-ID-FROM-wrangler-d1-create"

@@ -1,11 +1,11 @@
 {
-  "name": "claude-coop",
-  "version": "0.1.1",
-  "description": "Co-op mode for Claude Code: one lead Claude hands tasks to worker Claudes on your friends' PCs and accounts, and every Claude sees what the crew is doing.",
+  "name": "claude-code-multi-pc",
+  "version": "0.1.2",
+  "description": "Run Claude Code across multiple PCs and Claude accounts: one lead Claude hands tasks to worker Claudes on your friends' computers, and every Claude sees what the crew is doing.",
   "type": "module",
   "bin": {
     "coop": "bin/coop.js",
-    "claude-coop": "bin/coop.js"
+    "claude-code-multi-pc": "bin/coop.js"
   },
   "files": [
     "bin/",
@@ -30,6 +30,10 @@
     "mcp",
     "channels",
     "multi-agent",
+    "multi-pc",
+    "multi-account",
+    "multiple-computers",
+    "remote-agents",
     "collaboration",
     "co-op",
     "pair-programming"
@@ -37,6 +41,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Plyxen/claude-coop.git"
+    "url": "git+https://github.com/Plyxen/claude-code-multi-pc.git"
   }
 }

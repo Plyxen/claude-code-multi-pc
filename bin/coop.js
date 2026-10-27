@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// claude-coop command line. `coop help` lists the commands.
+// claude-code-multi-pc command line. `coop help` lists the commands.
 import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { join as joinPath } from 'node:path'
 import { parseArgs } from 'node:util'
@@ -19,7 +19,7 @@ const { INSTALL_COMMAND, inviteText } = await import('../src/meta.js')
 // CLI commands are one-off, so they don't count as being online.
 const hubClient = (profile) => new HubClient({ ...profile, presence: false })
 
-const HELP = `claude-coop ${VERSION}: one lead Claude, a crew of worker Claudes on other PCs.
+const HELP = `claude-code-multi-pc ${VERSION}: one lead Claude, a crew of worker Claudes on other PCs.
 
 Lead
   coop hub [--port 8765] [--host 127.0.0.1] [--data DIR] [--lead-name NAME] [--crew NAME]
@@ -111,10 +111,10 @@ async function hub(args) {
     dbPath: joinPath(dataDir, 'hub.db'),
     leadToken,
     leadName,
-    hubName: opts.crew ?? process.env.COOP_HUB_NAME ?? 'claude-coop',
+    hubName: opts.crew ?? process.env.COOP_HUB_NAME ?? 'coop',
     maxWorkers: Number(process.env.COOP_MAX_WORKERS) || 8,
   })
-  console.log(`claude-coop hub ${VERSION} is running at ${server.url} (data in ${dataDir})`)
+  console.log(`claude-code-multi-pc hub ${VERSION} is running at ${server.url} (data in ${dataDir})`)
   console.log(`Lead: ${leadName}`)
   if (newLeadToken) {
     console.log(`\nNew lead token (shown once, saved in ${tokenFile}):\n  ${leadToken}`)
@@ -214,7 +214,7 @@ async function doctor(args) {
   }
 
   const [major, minor] = process.versions.node.split('.').map(Number)
-  check(major > 22 || (major === 22 && minor >= 13), `Node.js ${process.versions.node}`, 'claude-coop needs Node.js 22.13 or newer.')
+  check(major > 22 || (major === 22 && minor >= 13), `Node.js ${process.versions.node}`, 'claude-code-multi-pc needs Node.js 22.13 or newer.')
 
   const bin = findClaude()
   const version = bin && claudeVersion(bin)

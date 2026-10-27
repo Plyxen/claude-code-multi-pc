@@ -1,6 +1,6 @@
 # How it works
 
-claude-coop has three parts:
+claude-code-multi-pc has three parts:
 
 | Part | Runs on | Job |
 | --- | --- | --- |
@@ -56,7 +56,7 @@ Events that arrive together go out as one batched push, so an idle Claude wakes 
 
 ## Reliability
 
-Channel pushes are best effort: Claude Code doesn't acknowledge them. claude-coop doesn't depend on any one push arriving:
+Channel pushes are best effort: Claude Code doesn't acknowledge them. claude-code-multi-pc doesn't depend on any one push arriving:
 
 - The hub is the source of truth. `coop_status` always shows the real board.
 - A worker started with `coop start` begins by checking the board for work assigned to it.

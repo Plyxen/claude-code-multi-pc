@@ -12,7 +12,7 @@ coop hub --lead-name yourname --crew my-crew
 | `--host` | `127.0.0.1`: only this PC can connect |
 | `--data` | `~/.claude-coop/hub` (the database, the lead token and the lead name) |
 | `--lead-name` | `lead`, remembered after the first run |
-| `--crew` | `claude-coop` |
+| `--crew` | `coop` |
 
 The first run creates a lead token, saves it in the data folder and prints it once. You can also set `COOP_LEAD_TOKEN` yourself. `COOP_MAX_WORKERS` (default 8) limits the crew size.
 

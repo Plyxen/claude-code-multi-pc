@@ -1,6 +1,6 @@
 # Project setup
 
-claude-coop works with any git repository, but co-op goes much better when the project tells every Claude the house rules. Workers read the project's CLAUDE.md like any Claude Code session, and its rules come before anything a task says.
+claude-code-multi-pc works with any git repository, but co-op goes much better when the project tells every Claude the house rules. Workers read the project's CLAUDE.md like any Claude Code session, and its rules come before anything a task says.
 
 ## 1. Give everyone push access
 

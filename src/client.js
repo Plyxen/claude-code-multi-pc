@@ -27,7 +27,7 @@ export class HubClient {
         headers: {
           authorization: `Bearer ${this.token}`,
           'content-type': 'application/json',
-          'user-agent': `claude-coop/${VERSION}`,
+          'user-agent': `claude-code-multi-pc/${VERSION}`,
           ...(this.presence ? {} : { 'x-coop-presence': 'off' }),
         },
         body: body === undefined ? undefined : JSON.stringify(body),
