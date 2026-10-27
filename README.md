@@ -75,6 +75,8 @@ coop start
 
 Claude Code starts and shows two prompts the first time: trust the folder, and confirm the development channel (claude-code-multi-pc isn't on Anthropic's channel allowlist during the research preview). Press Enter on both, then minimize the window. Full guide: [docs/worker-setup.md](docs/worker-setup.md).
 
+Everyone updates later with `coop update`.
+
 ## What each Claude gets
 
 | Lead tools | Worker tools | Both |

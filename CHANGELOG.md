@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- `coop update` installs the latest version from GitHub; `coop update --check` only says whether there is one. A coop that runs from a git clone isn't reinstalled: it tells you to `git pull` instead.
+
 ## 0.1.2
 
 - Renamed from claude-coop to claude-code-multi-pc, so people looking for Claude Code across several PCs and accounts can find it. The command is still `coop`, settings stay in `~/.claude-coop`, and the old GitHub address redirects. To switch an existing install: `npm uninstall -g claude-coop`, then `npm install -g github:Plyxen/claude-code-multi-pc`.

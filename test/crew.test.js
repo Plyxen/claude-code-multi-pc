@@ -2,7 +2,8 @@
 // each driven the way Claude Code drives it (stdio MCP client).
 import assert from 'node:assert/strict'
 import { execFile } from 'node:child_process'
-import { mkdtempSync, rmSync } from 'node:fs'
+import { existsSync, mkdtempSync, rmSync } from 'node:fs'
+import { createServer } from 'node:http'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { after, before, test } from 'node:test'
@@ -21,7 +22,11 @@ let hub
 const sessions = []
 
 async function coop(...args) {
-  const { stdout } = await run(process.execPath, [BIN, ...args], { env: { ...process.env, COOP_HOME: home } })
+  return coopWith({}, ...args)
+}
+
+async function coopWith(env, ...args) {
+  const { stdout } = await run(process.execPath, [BIN, ...args], { env: { ...process.env, COOP_HOME: home, ...env } })
   return stdout
 }
 
@@ -203,4 +208,21 @@ test('coop start builds the right claude command line', async () => {
   const lead = await coop('start', '--profile', 'boss', '--dry-run', '--claude', 'claude', '--', '--model', 'opus')
   assert.doesNotMatch(lead, /--permission-mode/)
   assert.match(lead.trim(), /--model opus$/)
+})
+
+test('coop update compares with the latest version and leaves git clones to git', async () => {
+  // Stands in for package.json on GitHub.
+  let latest = '0.0.1'
+  const github = createServer((request, response) => response.end(JSON.stringify({ name: 'claude-code-multi-pc', version: latest })))
+  await new Promise((resolve) => github.listen(0, '127.0.0.1', resolve))
+  const env = { COOP_UPDATE_URL: `http://127.0.0.1:${github.address().port}/package.json` }
+  try {
+    assert.match(await coopWith(env, 'update'), /is up to date/)
+    latest = '99.0.0'
+    assert.match(await coopWith(env, 'update', '--check'), /coop 99\.0\.0 is out \(you have .*\)\. Run coop update/)
+    // Tests run from a git clone, where update must point at git pull and not run npm.
+    if (existsSync(new URL('../.git', import.meta.url))) assert.match(await coopWith(env, 'update'), /update it there with git pull/)
+  } finally {
+    github.close()
+  }
 })

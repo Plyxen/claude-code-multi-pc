@@ -2,6 +2,7 @@
 // claude-code-multi-pc command line. `coop help` lists the commands.
 import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { join as joinPath } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 
 // node:sqlite prints an ExperimentalWarning on import; keep the CLI quiet.
@@ -14,7 +15,7 @@ const { HubClient } = await import('../src/client.js')
 const config = await import('../src/config.js')
 const { formatBoard } = await import('../src/format.js')
 const { VERSION, newToken } = await import('../src/hub/app.js')
-const { INSTALL_COMMAND, inviteText } = await import('../src/meta.js')
+const { INSTALL_COMMAND, REPO, inviteText } = await import('../src/meta.js')
 
 // CLI commands are one-off, so they don't count as being online.
 const hubClient = (profile) => new HubClient({ ...profile, presence: false })
@@ -34,6 +35,7 @@ Everyone
                                   Start Claude Code in this folder, connected to the crew
   coop status                     Show the crew board
   coop doctor                     Check this PC's setup
+  coop update [--check]           Update coop to the latest version (--check: only look)
   coop profiles                   List your crew profiles
   coop use PROFILE                Make a profile the default
 
@@ -58,6 +60,7 @@ const commands = {
   start,
   status,
   doctor,
+  update,
   profiles,
   use,
   token: async () => console.log(newToken()),
@@ -243,6 +246,50 @@ async function doctor(args) {
 
   console.log(problems ? `\n${problems} thing(s) to fix.` : '\nAll good.')
   if (problems) process.exitCode = 1
+}
+
+async function update(args) {
+  const opts = options(args, { check: { type: 'boolean' } })
+  const latest = await latestVersion()
+  if (compareVersions(latest, VERSION) <= 0) {
+    console.log(`coop ${VERSION} is up to date.`)
+    return
+  }
+  if (opts.check) {
+    console.log(`coop ${latest} is out (you have ${VERSION}). Run coop update to install it.`)
+    return
+  }
+  // A git clone (installed with npm link or npm install -g <folder>) is
+  // someone's working copy: leave it to git rather than reinstalling over it.
+  const root = fileURLToPath(new URL('..', import.meta.url))
+  if (existsSync(joinPath(root, '.git'))) {
+    console.log(`coop ${latest} is out (you have ${VERSION}). This coop runs from the git clone in ${root}: update it there with git pull.`)
+    return
+  }
+  console.log(`Updating coop ${VERSION} to ${latest}: ${INSTALL_COMMAND}`)
+  const { spawnSync } = await import('node:child_process')
+  if (spawnSync(INSTALL_COMMAND, { stdio: 'inherit', shell: true }).status !== 0) throw new Error(`the update failed. Try it yourself: ${INSTALL_COMMAND}`)
+  console.log(`\nUpdated to ${latest}. Restart open coop sessions (close the window, then coop start) to use it.`)
+}
+
+// The version on GitHub's main branch. COOP_UPDATE_URL points elsewhere in tests.
+async function latestVersion() {
+  const url = process.env.COOP_UPDATE_URL ?? `https://raw.githubusercontent.com/${REPO}/main/package.json`
+  let response
+  try {
+    response = await fetch(url, { signal: AbortSignal.timeout(15_000) })
+  } catch (error) {
+    throw new Error(`can't check for updates (${error.cause?.code ?? error.cause?.message ?? error.message})`)
+  }
+  if (!response.ok) throw new Error(`can't check for updates (GitHub answered HTTP ${response.status})`)
+  const { version } = await response.json()
+  if (!/^\d+\.\d+\.\d+/.test(version ?? '')) throw new Error("can't check for updates (no version found)")
+  return version
+}
+
+function compareVersions(a, b) {
+  const [x, y] = [a, b].map((v) => v.split(/[.-]/).slice(0, 3).map(Number))
+  return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]
 }
 
 async function profiles() {

@@ -60,6 +60,10 @@ If your plan doesn't include auto mode, Claude Code says so at startup. Use `--p
 
 Run your personal sessions in a **different folder** (or a second clone), so you don't both edit the same files. `coop start --worktree` gives the worker its own git worktree automatically.
 
+## Updating
+
+Run `coop update`. It checks GitHub for a newer version and installs it; `coop update --check` only tells you whether there is one. A running session keeps the old version until you close the window and `coop start` again.
+
 ## Stopping
 
 - Pause: close the window (or press Ctrl+C twice). Run `coop start` to continue.
