@@ -21,6 +21,10 @@ If channels can't work on your setup at all, a worker can still poll: start Clau
 
 Claude Code's v2 MCP runtime doesn't register channel servers that negotiate MCP protocol revision 2026-07-28. claude-code-multi-pc uses MCP SDK 1.x, which doesn't, so it registers normally. If you still see it fail, set `MCP_PROTOCOL_NEGOTIATION=legacy` before `coop start` and [open an issue](https://github.com/Plyxen/claude-code-multi-pc/issues).
 
+## "coop.ps1 cannot be loaded because running scripts is disabled on this system"
+
+This comes from PowerShell on Windows: its execution policy blocks the script npm installed for `coop`. Type `coop.cmd` instead, as in `coop.cmd start`. It's the same command, and you don't need to change the policy. In Command Prompt, plain `coop` works.
+
 ## "Claude Code (the `claude` command) was not found"
 
 Install Claude Code ([quickstart](https://code.claude.com/docs/en/quickstart)) or point `CLAUDE_BIN` at it, or pass `coop start --claude <path>`.
