@@ -5,17 +5,45 @@
 You and your friends each have Claude Code on your own computer, signed in to your own account. With this, your Claude becomes the **lead** and theirs become the **crew**. Your Claude hands out tasks, their Claudes do them on their own PCs and open pull requests, and every Claude sees what the others are doing. Your friends don't have to babysit anything. They start it once, minimize the window, and get on with their day.
 
 ```
-        YOUR PC                                                FRIENDS' PCs
- ┌────────────────────┐        ┌───────────────────┐       ┌────────────────────┐
- │  Claude Code       │        │       hub         │       │  Claude Code       │
- │  (lead)            │◄──────►│  task board,      │◄─────►│  (worker: anna)    │
- │  assigns, reviews, │        │  crew, messages   │       │  claims, codes,    │
- │  answers questions │        │  Cloudflare Worker│       │  pushes, submits   │
- └────────────────────┘        │  or your own PC   │       └────────────────────┘
-                               └───────────────────┘       ┌────────────────────┐
-              code moves through git: one branch           │  (worker: bob) ... │
-              and pull request per task                    └────────────────────┘
+ ┌─────────────────────────────────────┐
+ │ your PC, your Claude account        │
+ │ Claude Code as the lead             │
+ │ hands out tasks, reviews the work   │
+ │ approvals need you and a passphrase │
+ └──────────────────┬──────────────────┘
+                    │ own token
+                    │ sends tasks,
+                    │ picks up news
+                    ▼
+ ┌─────────────────────────────────────┐
+ │ HUB: a Cloudflare Worker or your PC │
+ │ task board, crew list, messages     │
+ │ checks every token and role         │
+ │ rate limits and an audit log        │
+ │ holds no code                       │
+ └────────┬───────────────────┬────────┘
+          ▲                   ▲
+          │ own token         │
+          │ picks up tasks,   │
+          │ reports back      │
+ ┌────────┴────────┐ ┌────────┴────────┐
+ │ anna's PC       │ │ bob's PC        │
+ │ anna's account  │ │ bob's account   │
+ │ a worker Claude │ │ a worker Claude │
+ │ checks on tools │ │ checks on tools │
+ │ and git pushes  │ │ and git pushes  │
+ └────────┬────────┘ └────────┬────────┘
+          │ pushes a branch   │
+          │ opens a PR        │
+          ▼                   ▼
+ ┌─────────────────────────────────────┐
+ │ GIT HOST: GitHub or similar         │
+ │ one branch and PR per task          │
+ │ lead reviews; merging is your call  │
+ └─────────────────────────────────────┘
 ```
+
+Every PC reaches out to the hub with its own token. Nothing connects in to a worker's PC, and the Claudes never talk to each other directly. When something new arrives, coop pushes it into the running Claude session. The hub can read tasks and messages, because they aren't encrypted end to end, so [only use a hub you trust](docs/threat-model.md#a-compromised-hub-or-its-host).
 
 **What it isn't:** an account switcher (one person, many accounts), a multi-agent framework on one machine, or remote desktop. Each Claude stays on its own PC, under its own person's account and usage, and they cooperate on one git repository.
 
