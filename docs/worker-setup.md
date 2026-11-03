@@ -21,6 +21,8 @@ coop join --hub https://THE-HUB-URL --token coop_YOUR_TOKEN
 
 Leave `--token` off and `coop join` asks for it, which keeps it out of your shell history.
 
+On Windows, PowerShell may refuse `coop` with *running scripts is disabled on this system*. Type `coop.cmd` in place of `coop`, here and in the steps below, or use Command Prompt. You don't need to change the policy.
+
 Then, in your clone of the project:
 
 ```bash
