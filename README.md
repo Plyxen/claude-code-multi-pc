@@ -46,6 +46,8 @@ You and your friends each have Claude Code on your own computer, signed in to yo
 
 ## Quick start
 
+On Windows, PowerShell may refuse `coop` with *running scripts is disabled on this system*. Type `coop.cmd` in place of `coop`, or use Command Prompt. You don't need to change the policy.
+
 ### You (the lead)
 
 ```bash
@@ -97,6 +99,7 @@ On the first start Claude Code asks them to trust the folder. It also warns abou
 | `coop permissions` · `coop approve WORKER ID` · `coop deny WORKER ID` | Lead only: answer a worker's permission prompts. Approving asks for your passphrase, in your own terminal. |
 | `coop audit` | Lead only: the hub's security log. `coop audit --local` shows what coop's checks blocked on this PC. |
 | `coop tokens` · `coop tokens rotate` | List tokens, or renew yours. New tokens last 90 days. |
+| `coop profiles` · `coop use PROFILE` | List the crews you've joined, or make one the default. |
 
 `coop help` lists everything. If someone's PC is off, their tasks wait on the hub until they `coop start` again.
 
@@ -140,7 +143,7 @@ It's a young project that was hardened on purpose, and it can't make Claude immu
 
 ## Status
 
-Version 0.2: young, but tested end to end. `npm test` drives a real hub, the CLI and an MCP server per crew member, and an earlier version has run live between two PCs on two Claude accounts. Channels are a Claude Code research preview, so launch flags may change as Anthropic updates them. Issues and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). To report a vulnerability, please open a [security advisory](https://github.com/Plyxen/claude-code-multi-pc/security/advisories/new).
+Version 0.2: young, but tested end to end. `npm test` drives a real hub, the CLI and an MCP server per crew member, and a pre-release of this version has run live between two PCs on two Claude accounts. Channels are a Claude Code research preview, so launch flags may change as Anthropic updates them. Issues and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). To report a vulnerability, please open a [security advisory](https://github.com/Plyxen/claude-code-multi-pc/security/advisories/new).
 
 ## License
 
