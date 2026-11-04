@@ -8,8 +8,17 @@ updates:
     groups:
       dev-tools:
         dependency-type: development
+    ignore:
+      # Stay on the oldest Node coop supports, or the type check can miss newer features.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      # init and analyze have to move together: CodeQL fails if their versions differ.
+      codeql:
+        patterns:
+          - 'github/codeql-action*'
